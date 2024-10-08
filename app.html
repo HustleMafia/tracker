@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modified Pomodoro Time Tracker</title>
+    <!-- Link to external CSS stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Section -->
+        <header id="top-section">
+            <h1 id="greeting">Hi Cristian,</h1>
+            <div id="date-time">
+                <p id="current-date">Date: <span id="date"></span></p>
+                <p id="current-time">Time: <span id="time"></span></p>
+            </div>
+            <div id="input-fields">
+                <div class="input-group">
+                    <label for="work-time">Work Time (Minutes):</label>
+                    <input type="number" id="work-time" name="work-time" min="1" required>
+                </div>
+                <div class="input-group">
+                    <label for="break-time">Break Time (Minutes):</label>
+                    <input type="number" id="break-time" name="break-time" min="1" required>
+                </div>
+                <div class="input-group">
+                    <label for="pushup-number">Preferred Pushup Number:</label>
+                    <input type="number" id="pushup-number" name="pushup-number" min="1" required>
+                </div>
+            </div>
+        </header>
+
+        <!-- Middle Section -->
+        <main id="middle-section">
+            <button id="start-button">Let's get to Work TOP G</button>
+            <div id="timer-display">
+                <h2 id="session-type">Work Session</h2>
+                <p id="timer">00:00</p>
+            </div>
+            <button id="stop-button">Stop</button>
+        </main>
+
+        <!-- Bottom Section -->
+        <section id="bottom-section">
+            <div id="today-graphs">
+                <h2>Today's Activity</h2>
+                <canvas id="today-chart"></canvas>
+            </div>
+            <div id="monthly-graphs">
+                <h2>Monthly Activity</h2>
+                <label for="month-select">Select Month:</label>
+                <select id="month-select" name="month-select">
+                    <!-- Month options will be populated dynamically -->
+                </select>
+                <canvas id="monthly-chart"></canvas>
+            </div>
+            <!-- Comparison Graph -->
+            <div id="comparison-graph">
+                <h2>Session Comparison</h2>
+                <canvas id="comparison-chart"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <!-- Include JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
