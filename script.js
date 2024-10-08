@@ -39,7 +39,9 @@ const breakEndSound = new Audio('break-end.mp3');
 
 /* Initialize App */
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
     loadDataFromStorage();
+    promptForUserName();
     updateGreeting();
     updateDateTime();
     populateMonthSelect();
@@ -60,6 +62,7 @@ monthSelect.addEventListener('change', updateMonthlyChart);
 
 /* Update Greeting */
 function updateGreeting() {
+    console.log('Updating greeting...');
     greetingEl.textContent = `Hi ${userName},`;
 }
 
@@ -68,10 +71,12 @@ function updateDateTime() {
     const now = new Date();
     dateEl.textContent = now.toLocaleDateString();
     timeEl.textContent = now.toLocaleTimeString();
+    // console.log('Updated date and time:', now.toLocaleString());
 }
 
 /* Start Session */
 function startSession() {
+    console.log('Starting session:', sessionType);
     updatePreferences(); // Ensure latest preferences are used
     if (sessionType === 'Work') {
         startWorkSession();
@@ -84,6 +89,7 @@ function startSession() {
 
 /* Stop Session */
 function stopSession() {
+    console.log('Stopping session');
     clearInterval(timerInterval);
     clearInterval(stopwatchInterval);
     sessionType = 'Work';
@@ -94,6 +100,7 @@ function stopSession() {
 
 /* Start Work Session */
 function startWorkSession() {
+    console.log('Starting Work Session');
     sessionType = 'Work';
     sessionTypeEl.textContent = 'Work Session';
     timerRemaining = workTime * 60;
@@ -103,6 +110,7 @@ function startWorkSession() {
         timerEl.textContent = formatTime(timerRemaining);
         if (timerRemaining <= 0) {
             clearInterval(timerInterval);
+            console.log('Work session completed');
             workEndSound.play();
             sessionData.push({
                 session: 'Work',
@@ -110,14 +118,15 @@ function startWorkSession() {
                 date: new Date()
             });
             sessionType = 'Break';
-            startSession(); // Automatically start Break Session
             updateCharts();
+            startSession(); // Automatically start Break Session
         }
     }, 1000);
 }
 
 /* Start Break Session */
 function startBreakSession() {
+    console.log('Starting Break Session');
     sessionType = 'Break';
     sessionTypeEl.textContent = 'Break Session';
     timerRemaining = breakTime * 60;
@@ -127,6 +136,7 @@ function startBreakSession() {
         timerEl.textContent = formatTime(timerRemaining);
         if (timerRemaining <= 0) {
             clearInterval(timerInterval);
+            console.log('Break session completed');
             breakEndSound.play();
             sessionData.push({
                 session: 'Break',
@@ -134,14 +144,15 @@ function startBreakSession() {
                 date: new Date()
             });
             sessionType = 'Pushup';
-            startSession(); // Automatically start Pushup Session
             updateCharts();
+            startSession(); // Automatically start Pushup Session
         }
     }, 1000);
 }
 
 /* Start Pushup Session */
 function startPushupSession() {
+    console.log('Starting Pushup Session');
     sessionType = 'Pushup';
     sessionTypeEl.textContent = 'Pushup Session';
     timerEl.textContent = formatTime(stopwatchTime);
@@ -157,6 +168,7 @@ function startPushupSession() {
 
 /* End Pushup Session */
 function endPushupSession() {
+    console.log('Ending Pushup Session');
     clearInterval(stopwatchInterval);
     const actualPushups = prompt('Enter the number of pushups performed:', pushupNumber);
     sessionData.push({
@@ -178,6 +190,7 @@ function endPushupSession() {
 
 /* Update Preferences */
 function updatePreferences() {
+    console.log('Updating preferences');
     workTime = parseInt(workTimeInput.value) || workTime;
     breakTime = parseInt(breakTimeInput.value) || breakTime;
     pushupNumber = parseInt(pushupNumberInput.value) || pushupNumber;
@@ -194,6 +207,7 @@ function formatTime(seconds) {
 
 /* Load Data from localStorage */
 function loadDataFromStorage() {
+    console.log('Loading data from localStorage');
     // Load Preferences
     if (localStorage.getItem('workTime')) {
         workTime = parseInt(localStorage.getItem('workTime'));
@@ -218,6 +232,7 @@ function loadDataFromStorage() {
 
 /* Save Preferences to localStorage */
 function savePreferencesToStorage() {
+    console.log('Saving preferences to localStorage');
     localStorage.setItem('workTime', workTime);
     localStorage.setItem('breakTime', breakTime);
     localStorage.setItem('pushupNumber', pushupNumber);
@@ -226,11 +241,13 @@ function savePreferencesToStorage() {
 
 /* Save Session Data to localStorage */
 function saveDataToStorage() {
+    console.log('Saving session data to localStorage');
     localStorage.setItem('sessionData', JSON.stringify(sessionData));
 }
 
 /* Initialize Charts */
 function initializeCharts() {
+    console.log('Initializing Charts');
     // Today's Activity Chart
     todayChart = new Chart(todayChartEl, {
         type: 'bar',
@@ -284,6 +301,7 @@ function initializeCharts() {
 
 /* Update Charts */
 function updateCharts() {
+    console.log('Updating all charts');
     updateTodayChart();
     updateMonthlyChart();
     updateComparisonChart();
@@ -291,6 +309,7 @@ function updateCharts() {
 
 /* Update Today's Chart */
 function updateTodayChart() {
+    console.log('Updating Today\'s Chart');
     const today = new Date().toDateString();
     const todaySessions = sessionData.filter(session => new Date(session.date).toDateString() === today);
 
@@ -316,6 +335,7 @@ function updateTodayChart() {
 
 /* Update Monthly Chart */
 function updateMonthlyChart() {
+    console.log('Updating Monthly Chart');
     const selectedMonth = monthSelect.value;
     const monthlySessions = sessionData.filter(session => {
         const sessionDate = new Date(session.date);
@@ -337,12 +357,14 @@ function updateMonthlyChart() {
 
 /* Update Comparison Chart */
 function updateComparisonChart() {
+    console.log('Updating Comparison Chart');
     comparisonChart.data.datasets[0].data = [workTime, breakTime, pushupNumber];
     comparisonChart.update();
 }
 
 /* Populate Month Select */
 function populateMonthSelect() {
+    console.log('Populating Month Select');
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -353,22 +375,18 @@ function populateMonthSelect() {
     }).join('');
 }
 
-/* Handle Month Selection Change */
-function updateMonthlyChart() {
-    updateMonthlyChart(); // Refresh the chart with the new month
-}
-
 /* Prompt for User Name on First Visit */
 function promptForUserName() {
-    if (!localStorage.getItem('userName')) {
+    if (!userName) {
+        console.log('Prompting for user name');
         const name = prompt('Please enter your name:', 'Cristian');
         if (name) {
             userName = name;
             localStorage.setItem('userName', userName);
-            updateGreeting();
         }
     }
 }
 
 /* Initialize the App */
-promptForUserName();
+// Moved inside DOMContentLoaded event listener
+
