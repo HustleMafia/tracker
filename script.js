@@ -71,7 +71,6 @@ function updateDateTime() {
     const now = new Date();
     dateEl.textContent = now.toLocaleDateString();
     timeEl.textContent = now.toLocaleTimeString();
-    // console.log('Updated date and time:', now.toLocaleString());
 }
 
 /* Start Session */
@@ -92,9 +91,23 @@ function stopSession() {
     console.log('Stopping session');
     clearInterval(timerInterval);
     clearInterval(stopwatchInterval);
+
+    // Play sound when stopping the session
+    workEndSound.play();
+
+    // Reset to initial state
     sessionType = 'Work';
     sessionTypeEl.textContent = 'Work Session';
     timerEl.textContent = formatTime(workTime * 60);
+
+    // Reset start button if in pushup session
+    if (sessionType === 'Pushup') {
+        startButton.textContent = "Let's get to Work TOP G";
+        startButton.removeEventListener('click', endPushupSession);
+        startButton.addEventListener('click', startSession);
+        stopwatchTime = 0;
+    }
+
     saveDataToStorage();
 }
 
@@ -389,4 +402,3 @@ function promptForUserName() {
 
 /* Initialize the App */
 // Moved inside DOMContentLoaded event listener
-
