@@ -9,7 +9,7 @@ let timerInterval;
 let timerRemaining = 0;
 let stopwatchInterval;
 let stopwatchTime = 0;
-let userName = 'Cristian'; // Default name, can be made dynamic
+let userName = ''; // Initialize as empty to prompt for name
 let sessionData = []; // To store sessions for analytics
 
 /* DOM Elements */
@@ -388,17 +388,14 @@ function populateMonthSelect() {
     }).join('');
 }
 
-/* Prompt for User Name on First Visit */
+/* Prompt for User Name on Every Visit */
 function promptForUserName() {
-    if (!userName) {
-        console.log('Prompting for user name');
-        const name = prompt('Please enter your name:', 'Cristian');
-        if (name) {
-            userName = name;
-            localStorage.setItem('userName', userName);
-        }
+    console.log('Prompting for user name');
+    const name = prompt('Please enter your name:', userName || 'Cristian');
+    if (name) {
+        userName = name;
+        localStorage.setItem('userName', userName);
+    } else {
+        userName = 'User'; // Default name if none provided
     }
 }
-
-/* Initialize the App */
-// Moved inside DOMContentLoaded event listener
